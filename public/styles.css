@@ -12,16 +12,16 @@
   --rail:76px; --maxw:1100px;
 }
 :root[data-theme="dark"]{
-  --ink:#000000; --panel:#0A0A0A; --panel2:#121212; --clip-lit:#1A1A1A;
-  --line:#262626; --line-soft:#171717;
-  --text:#F5F5F5; --muted:#A3A3A3; --dim:#737373;
+  --ink:#0D1117; --panel:#161B22; --panel2:#21262D; --clip-lit:#282E36;
+  --line:#30363D; --line-soft:#21262D;
+  --text:#F0F6FC; --muted:#8B949E; --dim:#6E7681;
   --amber:#F59E0B; --cyan:#38BDF8; --violet:#A78BFA; --emerald:#34D399;
   --shadow:none;
-  --nav-bg:rgba(0,0,0,.88); --rail-fade:rgba(0,0,0,.92);
+  --nav-bg:rgba(13,17,23,.88); --rail-fade:rgba(13,17,23,.92);
   --btn-hover:#FFFFFF;
-  --code-text:#E5E5E5; --code-key:#38BDF8; --code-num:#F59E0B;
-  --code-str:#34D399; --code-cm:#737373;
-  --ill-fill:#121212; --ill-soft:#1A1A1A;
+  --code-text:#C9D1D9; --code-key:#38BDF8; --code-num:#F59E0B;
+  --code-str:#34D399; --code-cm:#6E7681;
+  --ill-fill:#21262D; --ill-soft:#161B22;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -552,6 +552,48 @@ pre .cm{color:var(--code-cm)}
   /* Cards View Optimization (Rule boxes, Mechanism Cards, Stage Items) */
   .rule-box{padding:16px;border-radius:10px;}
   .rule-box .v{font-size:14px;}
+  
+  /* Five Stages Mobile Cards Layout */
+  .stages{margin-top:28px;}
+  .stage{
+    grid-template-columns:auto 1fr;
+    grid-template-areas:
+      "n t"
+      "d d";
+    gap:10px 14px;
+    padding:16px 14px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    margin-bottom:12px;
+  }
+  .stage .n{
+    grid-area:n;
+    font-size:14px;
+    font-weight:700;
+    color:var(--amber);
+    background:rgba(245,158,11,0.1);
+    padding:4px 8px;
+    border-radius:6px;
+    height:fit-content;
+  }
+  .stage .t{
+    grid-area:t;
+    font-size:17px;
+  }
+  .stage .t small{
+    display:inline-block;
+    margin-left:8px;
+    margin-top:0;
+    vertical-align:middle;
+  }
+  .stage .d{
+    grid-area:d;
+    font-size:14px;
+    line-height:1.55;
+    padding-top:4px;
+    border-top:1px stroke var(--line-soft);
+  }
   
   .mechs{grid-template-columns:1fr;gap:16px;margin-top:28px;}
   .mech{border-radius:12px;}
