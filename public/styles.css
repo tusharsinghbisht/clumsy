@@ -445,21 +445,75 @@ pre .cm{color:var(--code-cm)}
   .rail{display:none}
   .shell{padding-left:0}
   .wrap{padding:0 20px}
-  .nav-links a{display:none}
   .hero-grid{grid-template-columns:1fr; gap:32px;}
   .rule-flow{grid-template-columns:1fr;gap:12px}
   .arw{display:none}
   .stage{grid-template-columns:1fr;gap:8px;padding:18px 0}
-  .cmp,.cmp thead,.cmp tbody,.cmp tr,.cmp th,.cmp td{display:block;width:auto}
-  .cmp thead{display:none}
-  .cmp tbody tr{border-bottom:1px solid var(--line);padding:14px 0}
-  .cmp th,.cmp td{border:0;padding:4px 0}
-  .cmp tbody th{width:auto}
   .hero{padding:40px 0 0}
   section{padding:48px 0}
   .foot-top{grid-template-columns:1fr;gap:36px;}
   .foot-cols{grid-template-columns:repeat(2,1fr);gap:24px;}
   .foot-cta-box{flex-direction:column;align-items:flex-start;gap:16px;}
+}
+
+/* Mobile responsive layout for 'What it isn't' comparison section */
+@media(max-width:768px){
+  .cmp-wrapper{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    margin-top:24px;
+    border-radius:12px;
+    border:1px solid var(--line);
+  }
+  .cmp{
+    display:block;
+    width:100%;
+    margin-top:0;
+  }
+  .cmp thead{display:none;}
+  .cmp tbody{display:flex;flex-direction:column;gap:16px;padding:12px;}
+  .cmp tbody tr{
+    display:flex;
+    flex-direction:column;
+    background:var(--panel2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px;
+    gap:10px;
+  }
+  .cmp tbody tr:hover{background:var(--panel2);}
+  .cmp tbody th{
+    width:100%;
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-size:16px;
+    font-weight:700;
+    color:var(--text);
+    border-bottom:1px solid var(--line-soft);
+    padding-bottom:8px;
+  }
+  .cmp td{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:4px 0;
+    font-size:13.5px;
+    border-bottom:none;
+  }
+  .cmp td::before{
+    content:attr(data-label);
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--dim);
+    font-weight:500;
+    flex-shrink:0;
+    margin-right:12px;
+  }
+  .cmp td.us{
+    color:var(--cyan);
+    font-weight:600;
+  }
 }
 
 @media(max-width:640px){
