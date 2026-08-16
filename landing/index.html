@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clumsy — video editing, compiled</title>
+<meta name="description" content="Clumsy turns a prompt into a timeline, then a timeline into an MP4. Retrieval, not diffusion.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="rail" aria-hidden="true">
+  <div class="rail-ticks" id="ticks"></div>
+  <div class="tc-live mono" id="tcLive">00:00:00</div>
+  <div class="playhead" id="playhead"></div>
+</div>
+
+<div class="shell">
+
+<nav class="nav">
+  <div class="wrap nav-in">
+    <div class="brand">
+      <svg viewBox="0 0 100 100" aria-label="Clumsy logo">
+        <rect x="4" y="26" width="16" height="48" rx="6" fill="var(--text)"/>
+        <rect x="28" y="42" width="16" height="48" rx="6" fill="var(--amber)"/>
+        <rect x="52" y="26" width="16" height="48" rx="6" fill="var(--text)"/>
+        <rect x="76" y="26" width="16" height="48" rx="6" fill="var(--text)"/>
+      </svg>
+      <span class="brand-name">clumsy</span>
+    </div>
+    <div class="nav-links">
+      <a href="#pipeline">Pipeline</a>
+      <a href="#mechs">Mechanisms</a>
+      <a href="#ir">The IR</a>
+      <a href="#install">Install</a>
+      <button class="theme-btn" id="themeBtn" aria-label="Switch to dark theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="8.5"/>
+          <path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" stroke="none"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-left">
+      <p class="eyebrow">the first cut is always clumsy</p>
+      <h1>Video editing, <em>compiled.</em></h1>
+      <p class="lede">Clumsy turns a prompt into a timeline, then a timeline into an MP4. It arranges footage you already own — <strong>no diffusion, no generated pixels, no black box.</strong> The plan is JSON you can read, diff, and re-render.</p>
+      <div class="hero-cta">
+        <a class="btn btn-a" href="#install">Get started</a>
+        <a class="btn btn-b" href="#ir">Read the spec</a>
+        <span class="hero-note">MIT · ffmpeg 6 · <span class="cs-badge">Coming soon</span></span>
+      </div>
+    </div>
+    
+    <div class="hero-ill-container">
+      <div class="hero-glow hero-glow-1"></div>
+      <div class="hero-glow hero-glow-2"></div>
+      <div class="hero-card">
+        <div class="hero-card-head">
+          <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+          <span class="card-title">timeline_compiler</span>
+          <span class="cs-tag">Coming soon</span>
+        </div>
+        <svg class="hero-svg" viewBox="0 0 500 310" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background Grid & Tech Circuit accents matching body background -->
+          <pattern id="dotGrid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="1" fill="var(--line-soft)"/>
+          </pattern>
+          <rect width="500" height="310" fill="var(--ink)"/>
+          <rect width="500" height="310" fill="url(#dotGrid)"/>
+
+          <!-- Glowing Data Flow Lines -->
+          <path d="M 135 50 C 185 50, 185 115, 220 115" stroke="url(#cyanFlow)" stroke-width="2.5" fill="none" stroke-dasharray="6 4" class="animated-flow"/>
+          <path d="M 135 115 L 220 115" stroke="url(#violetFlow)" stroke-width="2" fill="none" stroke-dasharray="6 4" class="animated-flow-rev"/>
+          <path d="M 135 180 C 185 180, 185 115, 220 115" stroke="url(#amberFlow)" stroke-width="2" fill="none"/>
+
+          <!-- Compiler Core Flow out to Render -->
+          <path d="M 360 115 L 395 115" stroke="url(#amberFlow)" stroke-width="3" fill="none"/>
+          <polygon points="393,109 405,115 393,121" fill="var(--amber)"/>
+
+          <!-- NODE 1: Prompt Input Box -->
+          <g transform="translate(18, 28)">
+            <rect width="118" height="44" rx="8" fill="var(--panel)" stroke="var(--cyan)" stroke-width="1.5" filter="drop-shadow(0 2px 8px rgba(2,132,199,0.12))"/>
+            <text x="12" y="17" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--dim)">INPUT PROMPT</text>
+            <text x="12" y="32" font-family="'JetBrains Mono', monospace" font-size="10" fill="var(--text)" font-weight="600">"dawn city..."</text>
+            <circle cx="102" cy="22" r="4" fill="var(--cyan)"/>
+            <circle cx="102" cy="22" r="7" stroke="var(--cyan)" stroke-width="1" opacity="0.4"/>
+          </g>
+
+          <!-- NODE 2: Asset Library Index -->
+          <g transform="translate(18, 93)">
+            <rect width="118" height="44" rx="8" fill="var(--panel)" stroke="var(--violet)" stroke-width="1.5" filter="drop-shadow(0 2px 8px rgba(124,58,237,0.12))"/>
+            <text x="12" y="17" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--dim)">FOOTAGE INDEX</text>
+            <text x="12" y="32" font-family="'JetBrains Mono', monospace" font-size="10" fill="var(--violet)" font-weight="600">142 shots</text>
+            <rect x="84" y="12" width="22" height="20" rx="3" fill="var(--ill-soft)" stroke="var(--line)"/>
+            <path d="M 88 22 L 95 16 L 100 24" stroke="var(--violet)" stroke-width="1.2" fill="none"/>
+          </g>
+
+          <!-- NODE 3: Audio & Beat Grid -->
+          <g transform="translate(18, 158)">
+            <rect width="118" height="44" rx="8" fill="var(--panel)" stroke="var(--emerald)" stroke-width="1.5"/>
+            <text x="12" y="17" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--dim)">BEAT GRID</text>
+            <text x="12" y="32" font-family="'JetBrains Mono', monospace" font-size="10" fill="var(--emerald)" font-weight="600">118 BPM</text>
+            <path d="M 88 28 V 16 M 92 32 V 12 M 96 26 V 18 M 100 30 V 14" stroke="var(--emerald)" stroke-width="1.8" stroke-linecap="round"/>
+          </g>
+
+          <!-- CORE COMPILER ENGINE -->
+          <g transform="translate(220, 65)">
+            <rect width="140" height="98" rx="12" fill="var(--panel)" stroke="url(#coreGrad)" stroke-width="2" filter="drop-shadow(0 4px 16px rgba(245,158,11,0.18))"/>
+            <rect x="10" y="10" width="120" height="24" rx="4" fill="var(--ill-soft)"/>
+            <text x="70" y="26" font-family="'Bricolage Grotesque', sans-serif" font-size="12" font-weight="800" fill="var(--text)" text-anchor="middle">CLUMSY SOLVER</text>
+            
+            <text x="70" y="52" font-family="'JetBrains Mono', monospace" font-size="10" fill="var(--amber)" font-weight="600" text-anchor="middle">TIMELINE IR v1.0</text>
+            
+            <!-- Realtime status badge -->
+            <rect x="20" y="66" width="100" height="20" rx="10" fill="rgba(245,158,11,0.12)"/>
+            <circle cx="30" cy="76" r="3" fill="var(--amber)"/>
+            <text x="73" y="79" font-family="'JetBrains Mono', monospace" font-size="8" fill="var(--amber)" font-weight="700" text-anchor="middle">ZERO-DIFFUSION</text>
+          </g>
+
+          <!-- OUTPUT MP4 CONTAINER -->
+          <g transform="translate(405, 84)">
+            <rect width="76" height="64" rx="10" fill="url(#mp4Bg)" filter="drop-shadow(0 4px 12px rgba(2,132,199,0.3))"/>
+            <polygon points="32,20 48,30 32,40" fill="#FFFFFF"/>
+            <text x="38" y="52" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle">out.mp4</text>
+          </g>
+
+          <!-- TIMELINE EDITOR DISPLAY (Bottom Half) -->
+          <g transform="translate(18, 224)">
+            <rect width="464" height="68" rx="8" fill="var(--panel)" stroke="var(--line)"/>
+            
+            <!-- Track Header Labels -->
+            <text x="12" y="24" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--cyan)" font-weight="600">V1</text>
+            <text x="12" y="50" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--emerald)" font-weight="600">A1</text>
+
+            <!-- Video Clips V1 -->
+            <rect x="36" y="12" width="80" height="18" rx="4" fill="url(#clipCyan)" stroke="var(--cyan)" stroke-width="0.8"/>
+            <text x="76" y="24" font-family="'JetBrains Mono', monospace" font-size="8" fill="#FFF" text-anchor="middle">shot_01</text>
+
+            <rect x="122" y="12" width="138" height="18" rx="4" fill="url(#clipAmber)" stroke="var(--amber)" stroke-width="0.8"/>
+            <text x="191" y="24" font-family="'JetBrains Mono', monospace" font-size="8" fill="#FFF" text-anchor="middle">shot_04 (beat snap)</text>
+
+            <rect x="266" y="12" width="110" height="18" rx="4" fill="url(#clipViolet)" stroke="var(--violet)" stroke-width="0.8"/>
+            <text x="321" y="24" font-family="'JetBrains Mono', monospace" font-size="8" fill="#FFF" text-anchor="middle">shot_09</text>
+
+            <rect x="382" y="12" width="70" height="18" rx="4" fill="url(#clipCyan)" stroke="var(--cyan)" stroke-width="0.8"/>
+            <text x="417" y="24" font-family="'JetBrains Mono', monospace" font-size="8" fill="#FFF" text-anchor="middle">shot_12</text>
+
+            <!-- Audio Waveform Track A1 -->
+            <rect x="36" y="38" width="416" height="16" rx="4" fill="var(--ill-soft)"/>
+            <path d="M 42 46 Q 50 38 58 46 T 74 46 T 90 46 T 106 46 T 122 46 T 138 46 T 154 46 T 170 46 T 186 46 T 202 46 T 218 46 T 234 46 T 250 46 T 266 46 T 282 46 T 298 46 T 314 46 T 330 46 T 346 46 T 362 46 T 378 46 T 394 46 T 410 46 T 426 46 T 442 46" stroke="var(--emerald)" stroke-width="1.5" fill="none"/>
+
+            <!-- Beat Markers -->
+            <line x1="122" y1="8" x2="122" y2="58" stroke="var(--amber)" stroke-width="1" stroke-dasharray="2 2"/>
+            <line x1="266" y1="8" x2="266" y2="58" stroke="var(--amber)" stroke-width="1" stroke-dasharray="2 2"/>
+
+            <!-- Active Playhead -->
+            <line x1="190" y1="4" x2="190" y2="62" stroke="#EF4444" stroke-width="1.8"/>
+            <polygon points="186,4 194,4 190,9" fill="#EF4444"/>
+          </g>
+
+          <!-- GRADIENT DEFINITIONS -->
+          <defs>
+            <linearGradient id="cyanFlow" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="var(--cyan)"/>
+              <stop offset="100%" stop-color="var(--amber)"/>
+            </linearGradient>
+            <linearGradient id="violetFlow" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="var(--violet)"/>
+              <stop offset="100%" stop-color="var(--amber)"/>
+            </linearGradient>
+            <linearGradient id="amberFlow" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="var(--amber)"/>
+              <stop offset="100%" stop-color="#EF4444"/>
+            </linearGradient>
+            <linearGradient id="coreGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="var(--amber)"/>
+              <stop offset="100%" stop-color="var(--cyan)"/>
+            </linearGradient>
+            <linearGradient id="mp4Bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="var(--cyan)"/>
+              <stop offset="100%" stop-color="var(--violet)"/>
+            </linearGradient>
+
+            <linearGradient id="clipCyan" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#0284C7"/>
+              <stop offset="100%" stop-color="#0E7490"/>
+            </linearGradient>
+            <linearGradient id="clipAmber" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#D97706"/>
+              <stop offset="100%" stop-color="#B45309"/>
+            </linearGradient>
+            <linearGradient id="clipViolet" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#7C3AED"/>
+              <stop offset="100%" stop-color="#6D28D9"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="strip">
+      <div class="strip-head">
+        <span>DAWN_IN_AN_EMPTY_CITY</span>
+        <span>00:00:32:00 · 30 FPS</span>
+      </div>
+      <div class="strip-body">
+        <div class="ruler" id="ruler"></div>
+        <div class="lbl lbl-v">V1</div>
+        <div class="track" id="track"></div>
+        <div class="lbl lbl-a">A1</div>
+        <div class="wave" id="wave"></div>
+        <div class="hero-ph"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="bars" aria-hidden="true">
+  <i style="background:#B4B4B4"></i><i style="background:#B4B400"></i>
+  <i style="background:#00B4B4"></i><i style="background:#00B400"></i>
+  <i style="background:#B400B4"></i><i style="background:#B40000"></i>
+  <i style="background:#0000B4"></i>
+</div>
+
+<section id="rule">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="tc">00:00:12:00</span>
+      <h2>The rule everything rests on</h2>
+      <span class="cs-tag">Coming soon</span>
+    </div>
+    <p class="sec-lede">The model never writes ffmpeg. It emits a declarative timeline, and a compiler turns that into a filter graph. Generated shell commands can't be tested, diffed, cached, or re-rendered at another resolution. A JSON plan can be all four.</p>
+    <div class="rule-flow">
+      <div class="rule-box"><span class="k">Input</span><span class="v">A prompt and your asset library</span></div>
+      <span class="arw">→</span>
+      <div class="rule-box mid"><span class="k">Timeline IR</span><span class="v">Validated, repairable, reproducible</span></div>
+      <span class="arw">→</span>
+      <div class="rule-box"><span class="k">Output</span><span class="v">One ffmpeg pass, one encode</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="pipeline">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="tc">00:00:24:00</span>
+      <h2>Five stages</h2>
+      <span class="cs-tag">Coming soon</span>
+    </div>
+    <p class="sec-lede">Two run once per asset. Three run once per video. The index is the seam between them.</p>
+    <div class="stages">
+      <div class="lane-tag">Once per asset</div>
+      <div class="stage">
+        <span class="n">01</span>
+        <span class="t">Ingest<small class="tag-code">DETERMINISTIC</small></span>
+        <span class="d">Shot-splits every file into atomic clips, normalizes to a fixed frame rate and mezzanine codec, then captions and embeds each shot. Cached forever.</span>
+      </div>
+      <div class="stage">
+        <span class="n">02</span>
+        <span class="t">Index<small class="tag-code">DETERMINISTIC</small></span>
+        <span class="d">Vectors, motion scores, shot scale, subject boxes, palettes, licences. For music: BPM, key, and a beat grid the cutter snaps to.</span>
+      </div>
+      <div class="lane-tag">Once per video</div>
+      <div class="stage">
+        <span class="n">03</span>
+        <span class="t">Plan<small class="tag-llm">MODEL</small></span>
+        <span class="d">Writes a beat sheet first — order, roles, intent — then binds each slot to a real shot by search and rerank. The only stage a model touches.</span>
+      </div>
+      <div class="stage">
+        <span class="n">04</span>
+        <span class="t">Solve<small class="tag-code">DETERMINISTIC</small></span>
+        <span class="d">Quantizes to frame boundaries, closes gaps, recomputes transition offsets, enforces reuse windows and shot variation, snaps every cut to the beat.</span>
+      </div>
+      <div class="stage">
+        <span class="n">05</span>
+        <span class="t">Render<small class="tag-code">DETERMINISTIC</small></span>
+        <span class="d">Compiles the timeline to a single filter graph. One invocation, one encode, correct colour tags. Preview and final share the code path.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="mechs">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="tc">00:00:38:00</span>
+      <h2>Three things you'd otherwise build yourself</h2>
+      <span class="cs-tag">Coming soon</span>
+    </div>
+    <p class="sec-lede">Most of the difficulty in automated editing isn't stitching clips together. It's these.</p>
+    <div class="mechs">
+
+      <div class="mech">
+        <figure>
+          <svg viewBox="0 0 340 148" role="img" aria-label="A long source file splitting into six shorter shots at scene boundaries">
+            <text class="ill-l" x="12" y="14">source.mp4 · 04:12</text>
+            <rect class="ill-box" x="12" y="24" width="316" height="26" rx="4"/>
+            <path class="ill-dash" d="M82 52V90M138 52V90M176 52V90M234 52V90M282 52V90"/>
+            <rect class="ill-box" x="12" y="92" width="64" height="26" rx="4"/>
+            <rect class="ill-box" x="86" y="92" width="46" height="26" rx="4"/>
+            <rect class="ill-box" x="142" y="92" width="28" height="26" rx="4"/>
+            <rect class="ill-amber" x="180" y="92" width="48" height="26" rx="4"/>
+            <rect class="ill-box" x="238" y="92" width="38" height="26" rx="4"/>
+            <rect class="ill-box" x="286" y="92" width="42" height="26" rx="4"/>
+            <text class="ill-l" x="12" y="136">6 shots · indexed separately</text>
+            <text class="ill-a" x="328" y="136" text-anchor="end">retrieved</text>
+          </svg>
+        </figure>
+        <div class="mech-txt">
+          <h3>Shots, not files</h3>
+          <p>Nothing retrieves well at file granularity. Ingest cuts every source at its scene boundaries, so the unit of search is a single shot with its own caption and embedding.</p>
+        </div>
+      </div>
+
+      <div class="mech">
+        <figure>
+          <svg viewBox="0 0 340 148" role="img" aria-label="A region of a source clip mapping down to a position on the timeline">
+            <text class="ill-l" x="12" y="14">shot_0412 · source time</text>
+            <rect class="ill-box" x="12" y="24" width="316" height="26" rx="4"/>
+            <rect class="ill-amber" x="118" y="24" width="96" height="26" rx="4"/>
+            <text class="ill-a" x="118" y="64">3.20</text>
+            <text class="ill-a" x="214" y="64" text-anchor="end">6.10</text>
+            <path class="ill-dash" d="M118 70L12 96M214 70L108 96"/>
+            <rect class="ill-line" x="12" y="98" width="316" height="26" rx="4"/>
+            <rect class="ill-amber" x="12" y="98" width="96" height="26" rx="4"/>
+            <text class="ill-l" x="12" y="140">timeline v0 · 0.00 → 2.90</text>
+          </svg>
+        </figure>
+        <div class="mech-txt">
+          <h3>Two clocks per clip</h3>
+          <p>Every clip stores where it came from and where it lands, separately. Nothing is positional, so clips render in parallel, cache independently, and two plans diff cleanly.</p>
+        </div>
+      </div>
+
+      <div class="mech">
+        <figure>
+          <svg viewBox="0 0 340 148" role="img" aria-label="Cut markers moving onto the beats of a music grid">
+            <text class="ill-l" x="12" y="14">bed.wav · 118 bpm</text>
+            <path class="ill-dash" d="M42 24V104M118 24V104M194 24V104M270 24V104"/>
+            <g class="ill-wave" id="mwave"></g>
+            <path class="ill-line" d="M12 104H328"/>
+            <path d="M42 22V106M194 22V106M270 22V106" stroke="var(--amber)" stroke-width="1.6"/>
+            <path d="M38 22h8l-4 7z" fill="var(--amber)"/>
+            <path d="M190 22h8l-4 7z" fill="var(--amber)"/>
+            <path d="M266 22h8l-4 7z" fill="var(--amber)"/>
+            <path class="ill-dash" d="M104 34V96"/>
+            <path d="M106 66h8" stroke="var(--amber)" stroke-width="1.4"/>
+            <path d="M112 62l5 4-5 4z" fill="var(--amber)"/>
+            <text class="ill-l" x="12" y="126">cuts land on beats</text>
+            <text class="ill-a" x="328" y="126" text-anchor="end">± 120 ms</text>
+          </svg>
+        </figure>
+        <div class="mech-txt">
+          <h3>Cuts land on beats</h3>
+          <p>The single largest gain in perceived quality per line of code. Ordinary shot choices cut on the beat read as deliberate; excellent ones cut off it read as accidental.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="ir">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="tc">00:00:52:00</span>
+      <h2>The plan is the product</h2>
+      <span class="cs-tag">Coming soon</span>
+    </div>
+    <p class="sec-lede">The same seed always produces the same file. Read it, edit it by hand, commit it next to your code.</p>
+<pre><span class="cm">// clumsy plan "dawn in an empty city" --dur 32 --ar 16:9</span>
+{
+  <span class="key">"schema_version"</span>: <span class="str">"1.0"</span>,
+  <span class="key">"seed"</span>: <span class="num">8412</span>,
+  <span class="key">"canvas"</span>: { <span class="key">"w"</span>: <span class="num">1920</span>, <span class="key">"h"</span>: <span class="num">1080</span>, <span class="key">"fps"</span>: <span class="num">30</span> },
+  <span class="key">"tracks"</span>: [{
+    <span class="key">"id"</span>: <span class="str">"v0"</span>,
+    <span class="key">"clips"</span>: [{
+      <span class="key">"asset_id"</span>: <span class="str">"shot_0412"</span>,
+      <span class="key">"src_in"</span>:  <span class="num">3.200</span>,   <span class="cm">// where in the source</span>
+      <span class="key">"src_out"</span>: <span class="num">6.100</span>,
+      <span class="key">"t_start"</span>: <span class="num">0.000</span>,   <span class="cm">// where on the timeline</span>
+      <span class="key">"t_end"</span>:   <span class="num">2.900</span>,
+      <span class="key">"transition_in"</span>: { <span class="key">"kind"</span>: <span class="str">"xfade"</span>, <span class="key">"dur"</span>: <span class="num">0.5</span> }
+    }]
+  }]
+}</pre>
+  </div>
+</section>
+
+<section id="compare">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="tc">00:01:04:00</span>
+      <h2>What it isn't</h2>
+      <span class="cs-tag">Coming soon</span>
+    </div>
+    <p class="sec-lede">This is a crowded category. Here's the honest map, so you can tell quickly whether Clumsy is the wrong tool for you.</p>
+    <table class="cmp">
+      <thead><tr><th>&nbsp;</th><th>Footage agents</th><th>Render APIs</th><th>Clumsy</th></tr></thead>
+      <tbody>
+        <tr><th>Input</th><td>What you upload for one project</td><td>JSON you write by hand</td><td class="us">A prompt and a library you keep</td></tr>
+        <tr><th>Understanding</th><td>Speech transcripts</td><td>None — you bring the plan</td><td class="us">Visual embeddings and captions</td></tr>
+        <tr><th>Silent footage</th><td>Struggles without dialogue</td><td>Not applicable</td><td class="us">Works the same either way</td></tr>
+        <tr><th>Generated pixels</th><td>Usually yes</td><td>No</td><td class="us">Never — by design</td></tr>
+        <tr><th>Same input, same file</th><td>No</td><td>Yes</td><td class="us">Yes, seeded and versioned</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="tc">00:01:18:00</span>
+      <h2>Start with a rough cut</h2>
+      <span class="cs-tag">Coming soon</span>
+    </div>
+    <p class="sec-lede">Point it at a folder. Ingest runs once and caches. After that, a render is a single command.</p>
+    <div class="install">
+      <div><span class="p">$ </span><span class="c">clumsy ingest ./footage --fps 30 --canvas 1920x1080</span></div>
+      <div><span class="p">$ </span><span class="c">clumsy render "dawn in an empty city" --dur 32 --music ./bed.wav</span></div>
+      <div><span class="p">→ </span><span class="c">out/dawn_8412.mp4 · plan saved to out/dawn_8412.json</span></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <div class="brand">
+          <svg viewBox="0 0 100 100" aria-label="Clumsy logo">
+            <rect x="4" y="26" width="16" height="48" rx="6" fill="var(--text)"/>
+            <rect x="28" y="42" width="16" height="48" rx="6" fill="var(--amber)"/>
+            <rect x="52" y="26" width="16" height="48" rx="6" fill="var(--text)"/>
+            <rect x="76" y="26" width="16" height="48" rx="6" fill="var(--text)"/>
+          </svg>
+          <span class="brand-name">clumsy</span>
+        </div>
+        <p class="foot-tagline">Video editing, compiled. Turn prompts into deterministic timeline IRs and MP4s without diffusion or generated pixels.</p>
+        <div class="foot-badge">
+          <span class="pulse-dot"></span> MIT License
+        </div>
+      </div>
+
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h4>Product <span class="cs-col-tag">Coming soon</span></h4>
+          <a href="#pipeline">Pipeline</a>
+          <a href="#mechs">Mechanisms</a>
+          <a href="#ir">Timeline IR Spec</a>
+          <a href="#compare">Comparison</a>
+          <a href="#install">Quickstart</a>
+        </div>
+        <div class="foot-col">
+          <h4>Resources <span class="cs-col-tag">Coming soon</span></h4>
+          <a href="https://github.com" target="_blank" rel="noreferrer">GitHub Repository</a>
+          <a href="#ir">JSON Schema</a>
+          <a href="https://ffmpeg.org" target="_blank" rel="noreferrer">ffmpeg 6 Docs</a>
+          <a href="#install">CLI Reference</a>
+        </div>
+        <div class="foot-col">
+          <h4>Ecosystem <span class="cs-col-tag">Coming soon</span></h4>
+          <a href="#">ffmpeg Compiler</a>
+          <a href="#">Beat Detector</a>
+          <a href="#">Shot Embedder</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-mid">
+      <div class="foot-cta-box">
+        <div>
+          <h3>Build with Clumsy</h3>
+          <p>Integrate programmatic video compilation into your workflow.</p>
+        </div>
+        <div class="foot-cmd">
+          <span class="p">Status:</span> <code>Coming soon</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-btm">
+      <span class="foot-note">© 2026 Clumsy Contributors · MIT License</span>
+      <span class="foot-note">Rough by name. Precise by design.</span>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
